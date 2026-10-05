@@ -1,2 +1,1 @@
-# About-Sujay-Soni
-Private invitation page
+# Private page
