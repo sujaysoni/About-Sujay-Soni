@@ -1,18 +1,19 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Private invitation</title>
-<style>body{margin:0;min-height:100vh;display:grid;place-items:center;background:#FAF5EC;font-family:system-ui,sans-serif;color:#2B2A33}
-.b{background:#fffcf6;border:1px solid #E8DFCF;border-radius:22px;padding:34px 28px;max-width:380px;width:88%;text-align:center;box-shadow:0 10px 40px rgba(43,42,51,.08)}
-h1{font-family:Georgia,serif;color:#2F6B67;margin:0 0 6px;font-size:1.7rem}p{color:#6B6A73;margin:0 0 18px}
-input{width:100%;padding:13px;border:1px solid #E8DFCF;border-radius:12px;font-size:1rem;box-sizing:border-box}
-button{margin-top:12px;width:100%;padding:13px;border:0;border-radius:999px;background:#C86B45;color:#fff;font-size:1rem;font-weight:700;cursor:pointer}
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=Caveat:wght@700&family=Figtree:wght@400;700&display=swap" rel="stylesheet">
+<style>body{margin:0;min-height:100vh;display:grid;place-items:center;background-color:#F7F0E3;background-image:radial-gradient(#D8CBB0 1.2px,transparent 1.3px);background-size:24px 24px;font-family:Figtree,system-ui,sans-serif;color:#1B2A41}
+.b{background:#FFFDF8;border:2px solid #1B2A41;border-radius:14px;padding:32px 26px;max-width:380px;width:88%;text-align:center;box-shadow:6px 6px 0 #1B2A41}
+.h{font-family:Caveat,cursive;font-size:1.7rem;color:#C8453A;margin:0}h1{font-family:'Bricolage Grotesque',sans-serif;margin:0 0 8px;font-size:1.9rem}p{color:#5C6678;margin:0 0 18px}
+input{width:100%;padding:13px;border:2px solid #1B2A41;border-radius:10px;font-size:1rem;box-sizing:border-box}
+button{margin-top:14px;width:100%;padding:13px;border:2px solid #1B2A41;border-radius:12px;background:#F2B134;color:#1B2A41;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:4px 4px 0 #1B2A41}
 #e{color:#a33a1a;min-height:1.3em;margin-top:10px;font-size:.92rem}.s{animation:s .35s}@keyframes s{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}</style></head>
-<body><form class="b" id="f"><h1>Hello, and welcome</h1><p>This page is shared by invitation. Please enter the password you were given.</p>
+<body><form class="b" id="f"><p class="h">Kem cho!</p><h1>Welcome</h1><p>This page is shared by invitation. Please enter the password you were given.</p>
 <input id="p" type="password" placeholder="Password" autocomplete="off" autofocus><button>Enter</button><div id="e"></div></form>
 <script>
 const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
 async function open_(pw,raw){const d=b64(raw),k=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);
 const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:d.slice(0,16),iterations:600000,hash:'SHA-256'},k,{name:'AES-GCM',length:256},false,['decrypt']);
 return new TextDecoder().decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:d.slice(16,28)},key,d.slice(28)))}
-let raw;const get=async()=>raw||(raw=await (await fetch('payload.txt')).text());
+let raw;const get=async()=>raw||(raw=await (await fetch('payload.txt',{cache:'no-store'})).text());
 async function go(pw){const h=await open_(pw,await get());try{sessionStorage.setItem('k',pw)}catch(e){}document.open();document.write(h);document.close()}
 document.getElementById('f').onsubmit=async e=>{e.preventDefault();const en=document.getElementById('e');en.textContent='Unlocking...';
 try{await go(document.getElementById('p').value)}catch(x){en.textContent='That password did not work. Please check and try again.';e.target.classList.remove('s');void e.target.offsetWidth;e.target.classList.add('s')}};
